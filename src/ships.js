@@ -1,6 +1,5 @@
 const ships = (length) => {
     const ship = [];
-
     for (let i=0; i<length; i++) {
         ship.push(null);
     }
@@ -9,13 +8,13 @@ const ships = (length) => {
         ship[position] = true;
     }
 
-    const checkSunk = () => ship.every(spot => spot)
+    const isSunk = () => ship.every(spot => spot)
 
     return {
         ship,
         length,
         hitSpot,
-        checkSunk,
+        isSunk,
     }
 }
 
