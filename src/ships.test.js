@@ -8,13 +8,31 @@ test('check length', () => {
 
 test('check ship made', () => {
     const testShip = ships(2);
-    expect(testShip.ship).toEqual([null, null]);
+    expect(testShip.ship).toEqual([
+        {
+            spot: 0,
+            hit: false
+        },
+        {
+            spot: 1,
+            hit: false
+        }
+    ]);
 })
 
 test('check ship hit', () => {
     const testShip = ships(2);
     testShip.hitSpot(1);
-    expect(testShip.ship).toEqual([null, true]);
+    expect(testShip.ship).toEqual([
+        {
+            spot: 0,
+            hit: false
+        },
+        {
+            spot: 1,
+            hit: true
+        }
+    ]);
 })
 
 test('check ship sunk', () => {
