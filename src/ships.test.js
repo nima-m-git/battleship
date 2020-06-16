@@ -38,11 +38,11 @@ test('check ship hit', () => {
 test('check ship sunk', () => {
     const testShip = ships(2);
     [0, 1].forEach(spot => testShip.hitSpot(spot));
-    expect(testShip.isSunk()).toBe(true);
+    expect(testShip.hasSunk()).toBe(true);
 })
 
 test('check ship didnt sink', () => {
     const testShip = ships(2);
     testShip.hitSpot(1);
-    expect(testShip.isSunk()).toBe(false);
+    expect(testShip.hasSunk()).toBe(false);
 })

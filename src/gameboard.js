@@ -1,5 +1,4 @@
 const gameboards = () => {
-
     let gameboard = [];
     (function() {
         for (let i=0; i<10; i++) {
@@ -14,6 +13,8 @@ const gameboards = () => {
         }
     }());
 
+    const missedSpots = [];
+
     const checkEmpty = (dir, axis, coords) => {
         const spots = [];
         for (let coord of coords) {
@@ -23,11 +24,15 @@ const gameboards = () => {
                 spots.push(gameboard[axis][coords].fill)
             }
         }
-        return spots.every(spot => !spot)
+        if (spots.every(spot => !spot)) {
+            return true
+        } else {
+            throw new Error('Overlap');
+        } 
     }
 
     const placeShip = ({ ship, dir, axis, coords }) => {
-        const oldboard = {...gameboard};
+        const oldboard = [...gameboard];
         if (checkEmpty(dir, axis, coords)) {
             coords.forEach(function(coord, spot) {
                 if (dir === 'vert') {
@@ -47,14 +52,43 @@ const gameboards = () => {
                 }
             })
         }
-        gameboard = {...oldboard}
+        gameboard = [...oldboard]
     }
-    
+
+    const receiveAttack = (x, y) => {
+        const oldboard = [...gameboard];
+        if (oldboard[y][x].hit) {
+            throw new Error('already attacked');
+        } else {
+            oldboard[y][x].hit = true;
+            if (oldboard[y][x].ship) {
+                oldboard[y][x].ship.hitSpot(oldboard[y][x].spot)
+            } else {
+                missedSpots.push([x, y])
+            }
+        }
+        gameboard = oldboard;
+    }
+
+    const areAllSunk = () => {
+        for (let row of gameboard) {
+            for (let spot of row) {
+                if (spot.fill === true && spot.hit === false) {
+                    return false
+                }
+            }
+        }
+        return true
+
+    }
+
     return {
         gameboard,
-        checkEmpty,
-        placeShip
+        placeShip,
+        receiveAttack,
+        areAllSunk
     }
 }
+  
 
 export { gameboards }

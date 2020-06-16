@@ -13,13 +13,13 @@ const ships = (length) => {
         ship[spot].hit = true;
     }
 
-    const isSunk = () => ship.every(spot => spot.hit)
+    const hasSunk = () => ship.every(spot => spot.hit)
 
     return {
         ship,
         length,
         hitSpot,
-        isSunk,
+        hasSunk,
     }
 }
 
