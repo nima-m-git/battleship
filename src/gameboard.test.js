@@ -50,15 +50,15 @@ test('gameboard saves state after adding two ships', () => {
 })
 
 test('gameboard receiveAttacks on all ship1 positions sink ship', () => {
-    board1.receiveAttack(2, 2);
-    board1.receiveAttack(2, 3);
-    board1.receiveAttack(2, 4);
+    board1.receiveAttack({ x: 2, y: 2 });
+    board1.receiveAttack({ x: 2, y: 3 });
+    board1.receiveAttack({ x: 2, y: 4 });
     expect(ship1.hasSunk()).toBe(true);
 })
 
 test('error if attack same position twice', () => {
-    board1.receiveAttack(4, 4);
-    expect(() => board1.receiveAttack(4, 4)).toThrow()
+    board1.receiveAttack({ x: 4, y: 4 });
+    expect(() => board1.receiveAttack({ x: 4, y: 4 })).toThrow()
 })
 
 
@@ -67,25 +67,7 @@ test('all are sunk', () => {
 })
 
 test('all are not sunk', () => {
-    board1.receiveAttack(3, 3)
+    board1.receiveAttack({ x: 3, y: 3 })
     expect(board1.areAllSunk()).toBe(true)
 })
 
-
-
-
-function arraysEqual(a, b) {
-    if (a === b) return true;
-    if (a == null || b == null) return false;
-    if (a.length != b.length) return false;
-  
-    // If you don't care about the order of the elements inside
-    // the array, you should sort both arrays here.
-    // Please note that calling sort on an array will modify that array.
-    // you might want to clone your array first.
-  
-    for (var i = 0; i < a.length; ++i) {
-      if (a[i] !== b[i]) return false;
-    }
-    return true;
-  }

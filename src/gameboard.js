@@ -12,7 +12,7 @@ const gameboards = () => {
             gameboard.push(row);
         }
     }());
-
+    const missedCoords = [];
     const missedSpots = [];
 
     const checkEmpty = (dir, axis, coords) => {
@@ -55,20 +55,23 @@ const gameboards = () => {
         gameboard = [...oldboard]
     }
 
-    const receiveAttack = (x, y) => {
-        const oldboard = [...gameboard];
-        if (oldboard[y][x].hit) {
+
+    const receiveAttack = ({ x, y, spotObj }) => {
+        // receive spot as object to attack instead of coords?
+        const spot = (spotObj)? spotObj : gameboard[y][x];
+
+        if (spot.hit) {
             throw new Error('already attacked');
         } else {
-            oldboard[y][x].hit = true;
-            if (oldboard[y][x].ship) {
-                oldboard[y][x].ship.hitSpot(oldboard[y][x].spot)
+            spot.hit = true;
+            if (spot.ship) {
+                spot.ship.hitSpot(spot.spot)
             } else {
-                missedSpots.push([x, y])
+                missedCoords.push([x, y])
             }
         }
-        gameboard = oldboard;
     }
+
 
     const areAllSunk = () => {
         for (let row of gameboard) {
