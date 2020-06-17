@@ -13,7 +13,6 @@ const gameboards = () => {
         }
     }());
     const missedCoords = [];
-    const missedSpots = [];
 
     const checkEmpty = (dir, axis, coords) => {
         const spots = [];
@@ -56,8 +55,7 @@ const gameboards = () => {
     }
 
 
-    const receiveAttack = ({ x, y, spotObj }) => {
-        // receive spot as object to attack instead of coords?
+    const receiveAttack = ({ x = null, y = null, spotObj = null }) => {
         const spot = (spotObj)? spotObj : gameboard[y][x];
 
         if (spot.hit) {

@@ -62,12 +62,16 @@ test('error if attack same position twice', () => {
 })
 
 
-test('all are sunk', () => {
+test('all are not sunk', () => {
     expect(board1.areAllSunk()).toBe(false)
 })
 
-test('all are not sunk', () => {
-    board1.receiveAttack({ x: 3, y: 3 })
+test('receive attack with spot object argument', () => {
+    const spotObj = board1.gameboard[3][3];
+    board1.receiveAttack({ spotObj, })
+})
+
+test('all are sunk', () => {
     expect(board1.areAllSunk()).toBe(true)
 })
 
