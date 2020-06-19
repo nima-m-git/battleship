@@ -27,6 +27,7 @@ const gameboards = () => {
         for (let i=0; i<ship.length; i++) {
             coords.push(randomCoord + i)
         }
+
         return {
             dir,
             axis,
@@ -38,49 +39,49 @@ const gameboards = () => {
         for (let ship of GAMESHIPS) {
             let randomCoords = generateRandomCoords(ship);
             while (!checkEmpty({...randomCoords})) {
-                randomCoords = generateRandomCoords(ship)
+                randomCoords = generateRandomCoords(ship);
             }
             placeShip({...randomCoords, ship})
         }
     }
 
 
-    const checkEmpty = (dir, axis, coords) => {
+    const checkEmpty = ({ dir, axis, coords, }) => {
         const spots = [];
         for (let coord of coords) {
             if (dir === 'col') {
                 spots.push(gameboard[coord][axis].fill)
             } else if (dir === 'row') {
-                spots.push(gameboard[axis][coords].fill)
+                spots.push(gameboard[axis][coord].fill)
             }
         }
-        if (spots.every(spot => !spot)) {
-            return true
-        } else {
-            throw new Error('Overlap');
-        } 
+        return (spots.every(spot => !spot))
+    }
+
+    const placeCustomShip = ({ ship, dir, axis, coords }) => {
+        if (checkEmpty({dir, axis, coords,})) {
+            placeShip({ ship, dir, axis, coords })
+        }
     }
 
     const placeShip = ({ ship, dir, axis, coords }) => {
-        if (checkEmpty(dir, axis, coords)) {
-            coords.forEach(function(coord, spot) {
-                if (dir === 'col') {
-                    gameboard[coord][axis] = {
-                        ...gameboard[coord][axis],
-                        fill: true,
-                        spot,
-                        ship,
-                    }
-                } else if (dir === 'row') {
-                    gameboard[axis][coord] = {
-                        ...gameboard[coord][axis],
-                        fill: true,
-                        spot,
-                        ship,
-                    }
+        coords.forEach(function(coord, spot) {
+            if (dir === 'col') {
+                gameboard[coord][axis] = {
+                    ...gameboard[coord][axis],
+                    fill: true,
+                    spot,
+                    ship,
                 }
-            })
-        }
+            } else if (dir === 'row') {
+                gameboard[axis][coord] = {
+                    ...gameboard[coord][axis],
+                    fill: true,
+                    spot,
+                    ship,
+                }
+            }
+        })
     }
 
 
@@ -113,7 +114,8 @@ const gameboards = () => {
 
     return {
         gameboard,
-        placeShip,
+        placeCustomShip,
+        checkEmpty, // DELETE AFTER TESTS
         randomFillShips,
         receiveAttack,
         areAllSunk
