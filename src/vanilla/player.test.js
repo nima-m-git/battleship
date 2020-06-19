@@ -8,7 +8,6 @@ const board2 = gameboards();
 const getEmptyBoard = () => gameboards();
 
 
-
 test('two clone testboards are equal', () => {
     expect(board1.gameboard).toEqual(board2.gameboard)
 })

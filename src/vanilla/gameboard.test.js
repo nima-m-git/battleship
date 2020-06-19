@@ -8,7 +8,7 @@ const board1 = gameboards();
 const emptyBoard = gameboards().gameboard;
 board1.placeShip({ 
     ship: ship1, 
-    dir: 'vert', 
+    dir: 'col', 
     axis: 2, 
     coords: [2, 3, 4] 
 })
@@ -31,7 +31,7 @@ test('gameboard wont allow ship overlap', () => {
     expect(() => {
         board1.placeShip({
         ship2,
-        dir: 'vert',
+        dir: 'col',
         axis: 2,
         coords: [3]
         })
@@ -41,7 +41,7 @@ test('gameboard wont allow ship overlap', () => {
 test('gameboard saves state after adding two ships', () => {
     board1.placeShip({
         ship: ship2,
-        dir: 'vert',
+        dir: 'col',
         axis: 3,
         coords: [3]
     })
@@ -50,15 +50,15 @@ test('gameboard saves state after adding two ships', () => {
 })
 
 test('gameboard receiveAttacks on all ship1 positions sink ship', () => {
-    board1.receiveAttack({ x: 2, y: 2 });
-    board1.receiveAttack({ x: 2, y: 3 });
-    board1.receiveAttack({ x: 2, y: 4 });
+    board1.receiveAttack({ col: 2, row: 2 });
+    board1.receiveAttack({ col: 2, row: 3 });
+    board1.receiveAttack({ col: 2, row: 4 });
     expect(ship1.hasSunk()).toBe(true);
 })
 
 test('error if attack same position twice', () => {
-    board1.receiveAttack({ x: 4, y: 4 });
-    expect(() => board1.receiveAttack({ x: 4, y: 4 })).toThrow()
+    board1.receiveAttack({ col: 4, row: 4 });
+    expect(() => board1.receiveAttack({ col: 4, row: 4 })).toThrow()
 })
 
 

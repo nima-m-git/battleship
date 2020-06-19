@@ -31,4 +31,4 @@ const GAMESHIPS = [
     ships(5)
 ]
 
-export { GAMESHIPS }
+export { GAMESHIPS, ships }
