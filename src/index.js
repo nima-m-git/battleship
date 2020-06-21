@@ -7,11 +7,20 @@ import { ships } from './ships'
 
 
 const DisplayBoard = (props) => {
-  const generateDisplay = (board) => {
+  const activeBoard = (whose) => whose !== props.currentPlayer
+
+  const generateDisplay = (board, whose) => {
+    const active = activeBoard(whose);
     return board.map((row, i) => 
       <tr key={i}>
         {row.map((spot, j) => 
-          <td key={j} hit={`${spot.hit}`} fill={`${spot.fill}`} onClick={() => props.receiveAttack(spot)}></td>)}
+          <td 
+            key={j} 
+            hit={`${spot.hit}`} 
+            fill={`${spot.fill}`} 
+            onClick={(active)? () => props.receiveAttack(spot) : null}
+            >
+          </td>)}
       </tr> 
     )
   } 
@@ -20,9 +29,9 @@ const DisplayBoard = (props) => {
     <div>
       <div id='playerBoard'>
         <h3>Player</h3>
-        <table className={((props.currentPlayer === 'computer')? 'active' : 'inactive') + ' player board '}>
+        <table className={((props.currentPlayer === 'enemy')? 'active' : 'inactive') + ' player board '}>
           <tbody>
-            {generateDisplay(props.playerBoard)}
+            {generateDisplay(props.playerBoard, 'player')}
           </tbody>
         </table>
       </div>
@@ -30,7 +39,7 @@ const DisplayBoard = (props) => {
         <h3>Enemy</h3>
         <table className={((props.currentPlayer === 'player')? 'active' : 'inactive') + ' player board '}>
           <tbody>
-            {generateDisplay(props.enemyBoard)}
+            {generateDisplay(props.enemyBoard, 'enemy')}
           </tbody>
         </table>
       </div>
@@ -88,25 +97,27 @@ class Gameplay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPlayer: 'player', //TODO: Change to 50/50 chance of 'player' or 'computer'
+      currentPlayer: 'player', //TODO: Change to 50/50 chance of 'player' or 'enemy'
       winner: null,
     };
     this.nextPlayerTurn = this.nextPlayerTurn.bind(this);
   }
 
   nextPlayerTurn() {
-    console.log('changing players')
     this.setState({
-      currentPlayer: (this.state.currentPlayer === 'player')? 'computer' : 'player',
+      currentPlayer: (this.state.currentPlayer === 'player')? 'enemy' : 'player',
     })
   }
 
   render() {
     return (
+      <div>
+      <h2>Turn: {this.state.currentPlayer}</h2>
       <Gameboard 
         currentPlayer={this.state.currentPlayer} 
         nextPlayerTurn={this.nextPlayerTurn}
-        />
+      />
+      </div>
     )
   }
 }
