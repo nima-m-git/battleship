@@ -15,7 +15,6 @@ code {
 .board {
   height: 300px;
   width: 300px;
-  background-color: rgba(138, 138, 223, 0.664);
 }
 
 .board, td {
@@ -23,10 +22,21 @@ code {
 }
 
 td[fill='true'] {
+  background-color: rgba(92, 71, 75, 0.507);
+}
+
+td[hit='true'][fill='true'] {
   background-color: crimson;
 }
 
+td[hit='true'][fill='null']{
+  background-color: rgba(10, 10, 10, 0.733);
+}
 
+
+.active {
+  background-color: rgba(138, 138, 223, 0.664);
+}
 
 .inactive {
   background-color: rgba(136, 162, 163, 0.534);

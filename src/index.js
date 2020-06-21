@@ -11,7 +11,7 @@ const DisplayBoard = (props) => {
     return board.map((row, i) => 
       <tr key={i}>
         {row.map((spot, j) => 
-          <td key={j} hit={`${spot.hit}`} fill={`${spot.fill}`} onClick={props.receiveAttack.bind(spot)}></td>)}
+          <td key={j} hit={`${spot.hit}`} fill={`${spot.fill}`} onClick={() => props.receiveAttack(spot)}></td>)}
       </tr> 
     )
   } 
@@ -54,7 +54,7 @@ class Gameboard extends React.Component {
   }
 
   receiveAttack(spot) {
-    if (spot.hit || this.props.currentPlayer === 'computer') {
+    if (spot.hit) {
       console.log('Invalid Attack');
     } else {
       spot.hit = true;
@@ -70,7 +70,6 @@ class Gameboard extends React.Component {
     board.randomFillShips()
     return board
   }
-
 
   render() {
     return(
@@ -96,6 +95,7 @@ class Gameplay extends React.Component {
   }
 
   nextPlayerTurn() {
+    console.log('changing players')
     this.setState({
       currentPlayer: (this.state.currentPlayer === 'player')? 'computer' : 'player',
     })
