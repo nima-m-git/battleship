@@ -1,7 +1,6 @@
 import { GAMESHIPS } from './ships';
 
 const gameboards = () => {
-    const missedCoords = [];
     let gameboard = createGameboard();
 
     function createGameboard() {
@@ -45,7 +44,6 @@ const gameboards = () => {
         }
     }
 
-
     const checkEmpty = ({ dir, axis, coords, }) => {
         const spots = [];
         for (let coord of coords) {
@@ -84,21 +82,21 @@ const gameboards = () => {
         })
     }
 
+    //  REMOVE: changes state, use in component method
+    // const receiveAttack = ({ col = null, row = null, spotObj = null }) => {
+    //     const spot = (spotObj)? spotObj : gameboard[row][col];
 
-    const receiveAttack = ({ col = null, row = null, spotObj = null }) => {
-        const spot = (spotObj)? spotObj : gameboard[row][col];
-
-        if (spot.hit) {
-            throw new Error('already attacked');
-        } else {
-            spot.hit = true;
-            if (spot.ship) {
-                spot.ship.hitSpot(spot.spot)
-            } else {
-                missedCoords.push([col, row])
-            }
-        }
-    }
+    //     if (spot.hit) {
+    //         throw new Error('already attacked');
+    //     } else {
+    //         spot.hit = true;
+    //         if (spot.ship) {
+    //             spot.ship.hitSpot(spot.spot)
+    //         } else {
+    //             missedCoords.push([col, row])
+    //         }
+    //     }
+    // }
 
 
     const areAllSunk = () => {
@@ -117,7 +115,7 @@ const gameboards = () => {
         placeCustomShip,
         checkEmpty, // DELETE AFTER TESTS
         randomFillShips,
-        receiveAttack,
+        // receiveAttack,
         areAllSunk
     }
 }

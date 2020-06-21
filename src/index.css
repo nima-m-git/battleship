@@ -11,3 +11,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.board {
+  height: 300px;
+  width: 300px;
+  background-color: rgba(138, 138, 223, 0.664);
+}
+
+.board, td {
+  border: 1px solid black;
+}
+
+td[fill='true'] {
+  background-color: crimson;
+}
+
+
+
+.inactive {
+  background-color: rgba(136, 162, 163, 0.534);
+}
