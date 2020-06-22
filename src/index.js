@@ -51,15 +51,13 @@ const DisplayBoard = (props) => {
 class Gameboard extends React.Component {
   constructor(props) {
     super(props);
-    this.initialstate = {
+    this.state = {
       playerBoard: this.randomSetup(),
       enemyBoard: this.randomSetup()
     }
-    this.state = {
-      ...this.initialstate
-    }
     this.receiveAttack = this.receiveAttack.bind(this);
     this.randomSetup = this.randomSetup.bind(this);
+    this.resetGame = this.resetGame.bind(this);
   }
 
   receiveAttack(spot, board) {
@@ -80,15 +78,31 @@ class Gameboard extends React.Component {
     return board
   }
 
+  // Tight coupling? single function resets two different component states
+  resetGame() {
+    this.props.resetGame()
+    this.setState({
+      playerBoard: this.randomSetup(),
+      enemyBoard: this.randomSetup()
+    })
+  }
+
   render() {
     return(
-      <DisplayBoard 
-        currentPlayer={this.props.currentPlayer}
-        playerBoard={this.state.playerBoard} 
-        enemyBoard={this.state.enemyBoard} 
-        receiveAttack={this.receiveAttack}
-        winner={this.props.winner}
+      <div>
+        <DisplayBoard 
+          currentPlayer={this.props.currentPlayer}
+          playerBoard={this.state.playerBoard} 
+          enemyBoard={this.state.enemyBoard} 
+          receiveAttack={this.receiveAttack}
+          winner={this.props.winner}
         />
+        <div id='reset'>
+          {this.props.winner 
+            && <button onClick={this.resetGame}>Reset Game</button>
+          }
+        </div>
+      </div>
     )
   }
 }
@@ -117,15 +131,18 @@ class Gameplay extends React.Component {
   checkWin(board) {
     const allSunk = board.areAllSunk();
     if (allSunk) {
-      const winner = this.state.currentPlayer;
-      this.setState({
-        winner,
-        currentPlayer: null,
-        playerScore: (winner === 'player')? this.state.playerScore + 1 : this.state.playerScore,
-        enemyScore: (winner === 'enemy')? this.state.enemyScore + 1 : this.state.enemyScore,
-      })
+      this.applyWin()
     }
     return allSunk
+  }
+
+  applyWin() {
+    const winner = this.state.currentPlayer;
+    this.setState({
+      winner,
+      playerScore: (winner === 'player')? this.state.playerScore + 1 : this.state.playerScore,
+      enemyScore: (winner === 'enemy')? this.state.enemyScore + 1 : this.state.enemyScore,
+    })
   }
 
   resetGame() {
@@ -139,12 +156,9 @@ class Gameplay extends React.Component {
     return (
       <div>
         {this.state.winner 
-          && <div>
-              <h2>Winner: {this.state.winner}!</h2>
-              <button onClick={this.resetGame}>Reset Game</button>
-            </div>
+          && <h2>Winner: {this.state.winner}!</h2>
         }
-        <div class='scoreBoard'>
+        <div className='scoreBoard'>
           <h2>Scores:</h2>
           <h3>Player: {this.state.playerScore}  Enemy: {this.state.enemyScore}</h3>
         </div>
@@ -154,6 +168,7 @@ class Gameplay extends React.Component {
           nextPlayerTurn={this.nextPlayerTurn}
           checkWin={this.checkWin}
           winner={this.state.winner}
+          resetGame={this.resetGame}
         />
       </div>
 
