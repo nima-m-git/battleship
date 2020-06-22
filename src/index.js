@@ -7,7 +7,7 @@ import { GAMESHIPS } from './ships'
 
 
 const DisplayBoard = (props) => {
-  const activeBoard = (whose) => whose !== props.currentPlayer && !props.winner
+  const activeBoard = (whose) => whose !== props.currentPlayer.name && !props.winner
 
   const generateDisplay = (board, whose) => {
     const active = activeBoard(whose);
@@ -28,18 +28,18 @@ const DisplayBoard = (props) => {
   return (
     <div id='gameBoards'>
       <div id='playerBoard'>
-        <h3>Player</h3>
-        <table className={((props.currentPlayer === 'enemy')? 'active' : 'inactive') + ' player board '}>
+        <h3>Player1</h3>
+        <table className={((props.currentPlayer.name === 'player2')? 'active' : 'inactive') + ' player1 board '}>
           <tbody>
-            {generateDisplay(props.playerBoard, 'player')}
+            {generateDisplay(props.player1Board, 'player1')}
           </tbody>
         </table>
       </div>
-      <div id='enemyBoard'>
-        <h3>Enemy</h3>
-        <table className={((props.currentPlayer === 'player')? 'active' : 'inactive') + ' player board '}>
+      <div id='player2Board'>
+        <h3>Player2</h3>
+        <table className={((props.currentPlayer.name === 'player1')? 'active' : 'inactive') + ' player2 board '}>
           <tbody>
-            {generateDisplay(props.enemyBoard, 'enemy')}
+            {generateDisplay(props.player2Board, 'player2')}
           </tbody>
         </table>
       </div>
@@ -52,8 +52,8 @@ class Gameboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      playerBoard: this.randomSetup(),
-      enemyBoard: this.randomSetup()
+      player1Board: this.randomSetup(),
+      player2Board: this.randomSetup()
     }
     this.receiveAttack = this.receiveAttack.bind(this);
     this.randomSetup = this.randomSetup.bind(this);
@@ -61,7 +61,7 @@ class Gameboard extends React.Component {
   }
 
   receiveAttack(spot, board) {
-    if (!spot.hit) {
+    if (!spot.hit) { // Change to add filter to spot onclick can be placed
       spot.hit = true;
       if (spot.ship) {
           spot.ship.hitSpot(spot.spot)
@@ -82,8 +82,8 @@ class Gameboard extends React.Component {
   resetGame() {
     this.props.resetGame()
     this.setState({
-      playerBoard: this.randomSetup(),
-      enemyBoard: this.randomSetup()
+      player1Board: this.randomSetup(),
+      player2Board: this.randomSetup()
     })
   }
 
@@ -92,8 +92,8 @@ class Gameboard extends React.Component {
       <div>
         <DisplayBoard 
           currentPlayer={this.props.currentPlayer}
-          playerBoard={this.state.playerBoard} 
-          enemyBoard={this.state.enemyBoard} 
+          player1Board={this.state.player1Board} 
+          player2Board={this.state.player2Board} 
           receiveAttack={this.receiveAttack}
           winner={this.props.winner}
         />
@@ -111,11 +111,21 @@ class Gameboard extends React.Component {
 class Gameplay extends React.Component {
   constructor(props) {
     super(props);
+    this.players = {
+      player1: {
+        name: 'player1',
+        type: 'human',
+        score: 0,
+      },
+      player2: {
+        name: 'player2',
+        type: 'computer',
+        score: 0,
+      }
+    }
     this.state = {
-      currentPlayer: 'player', //TODO: Change to 50/50 chance of 'player' or 'enemy'
+      currentPlayer: this.players.player1,
       winner: null,
-      playerScore: 0,
-      enemyScore: 0
     };
     this.nextPlayerTurn = this.nextPlayerTurn.bind(this);
     this.checkWin = this.checkWin.bind(this);
@@ -124,8 +134,11 @@ class Gameplay extends React.Component {
 
   nextPlayerTurn() {
     this.setState({
-      currentPlayer: (this.state.currentPlayer === 'player')? 'enemy' : 'player',
+      currentPlayer: (this.state.currentPlayer === this.players.player1)? this.players.player2 : this.players.player1,
     })
+    // if (this.state.currentPlayer.type === 'computer') {
+    //  APPLY COMPUTER MOVE
+    // }
   }
 
   checkWin(board) {
@@ -140,9 +153,8 @@ class Gameplay extends React.Component {
     const winner = this.state.currentPlayer;
     this.setState({
       winner,
-      playerScore: (winner === 'player')? this.state.playerScore + 1 : this.state.playerScore,
-      enemyScore: (winner === 'enemy')? this.state.enemyScore + 1 : this.state.enemyScore,
     })
+    winner.score++  
   }
 
   resetGame() {
@@ -156,13 +168,13 @@ class Gameplay extends React.Component {
     return (
       <div>
         {this.state.winner 
-          && <h2>Winner: {this.state.winner}!</h2>
+          && <h2>Winner: {this.state.winner.name}!</h2>
         }
         <div className='scoreBoard'>
           <h2>Scores:</h2>
-          <h3>Player: {this.state.playerScore}  Enemy: {this.state.enemyScore}</h3>
+          <h3>Player1: {this.players.player1.score}  Player2: {this.players.player2.score}</h3>
         </div>
-        <h2>Turn: {this.state.currentPlayer}</h2>
+        <h2>Turn: {this.state.currentPlayer.player}</h2>
         <Gameboard 
           currentPlayer={this.state.currentPlayer} 
           nextPlayerTurn={this.nextPlayerTurn}
