@@ -17,6 +17,10 @@ code {
   width: 300px;
 }
 
+#gameBoards {
+  display: flex;
+}
+
 .board, td {
   border: 1px solid black;
 }

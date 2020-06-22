@@ -1,4 +1,4 @@
-import { GAMESHIPS } from './ships';
+import { GAMESHIPS, TESTSHIPS } from './ships';
 
 const gameboards = () => {
     let gameboard = createGameboard();
@@ -35,7 +35,8 @@ const gameboards = () => {
     }
 
     const randomFillShips = () => {
-        for (let ship of GAMESHIPS) {
+        // CHANGE BACK TO GAMESHIPS AFTER TESTS
+        for (let ship of TESTSHIPS) {
             let randomCoords = generateRandomCoords(ship);
             while (!checkEmpty({...randomCoords})) {
                 randomCoords = generateRandomCoords(ship);

@@ -31,4 +31,9 @@ const GAMESHIPS = [
     ships(5)
 ]
 
-export { GAMESHIPS }
+// REMOVE AFTER TESTS
+const TESTSHIPS = [
+    ships(1), ships(1), 
+]
+
+export { GAMESHIPS, TESTSHIPS }
