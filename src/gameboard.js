@@ -83,21 +83,13 @@ const gameboards = () => {
         })
     }
 
-    //  REMOVE: changes state, use in component method
-    // const receiveAttack = ({ col = null, row = null, spotObj = null }) => {
-    //     const spot = (spotObj)? spotObj : gameboard[row][col];
-
-    //     if (spot.hit) {
-    //         throw new Error('already attacked');
-    //     } else {
-    //         spot.hit = true;
-    //         if (spot.ship) {
-    //             spot.ship.hitSpot(spot.spot)
-    //         } else {
-    //             missedCoords.push([col, row])
-    //         }
-    //     }
-    // }
+    // REMOVE: changes state, use in component method
+    const receiveAttack = (spot) => {
+        spot.hit = true;
+        if (spot.ship) {
+            spot.ship.hitSpot(spot.spot)
+        }
+    }
 
 
     const areAllSunk = () => {
@@ -116,7 +108,7 @@ const gameboards = () => {
         placeCustomShip,
         checkEmpty, // DELETE AFTER TESTS
         randomFillShips,
-        // receiveAttack,
+        receiveAttack,
         areAllSunk
     }
 }

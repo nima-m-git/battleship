@@ -28,7 +28,7 @@ const DisplayBoard = (props) => {
 
   return (
     <div id='gameBoards'>
-      <div>
+      <div className='playerBoard'>
         <h3>Player1</h3>
         <table className={((props.currentPlayer.name === 'player2')? 'active' : 'inactive') + ' player1 board '}>
           <tbody>
@@ -36,7 +36,7 @@ const DisplayBoard = (props) => {
           </tbody>
         </table>
       </div>
-      <div>
+      <div className='playerBoard'>
         <h3>Player2</h3>
         <table className={((props.currentPlayer.name === 'player1')? 'active' : 'inactive') + ' player2 board '}>
           <tbody>
@@ -59,10 +59,6 @@ class Gameboard extends React.Component {
     this.receiveAttack = this.receiveAttack.bind(this);
     this.randomSetup = this.randomSetup.bind(this);
     this.resetGame = this.resetGame.bind(this);
-
-    if (props.isComputer) {
-      this.computerMove()
-    }
   }
 
   receiveAttack(spot, board) {
@@ -81,13 +77,6 @@ class Gameboard extends React.Component {
     const board = gameboards()
     board.randomFillShips()
     return board
-  }
-
-  computerMove() {
-    const enemyBoard = (this.props.currentPlayer.name === 'player1')? this.state.player2Board : this.state.player1Board
-    const spot = computerMoves(enemyBoard);
-    console.log(spot)
-    this.receiveAttack(spot, enemyBoard);
   }
 
   // Tight coupling? single function resets two different component states
@@ -119,7 +108,6 @@ class Gameboard extends React.Component {
   }
 }
 
-
 class Gameplay extends React.Component {
   constructor(props) {
     super(props);
@@ -128,7 +116,6 @@ class Gameplay extends React.Component {
         name: 'player1',
         type: 'human',
         score: 0,
-        gameboard: null
       },
       player2: {
         name: 'player2',
@@ -175,6 +162,7 @@ class Gameplay extends React.Component {
   }
 
   render() {
+    console.log(this.state.winner)
     return (
       <div>
         {this.state.winner 
@@ -187,7 +175,6 @@ class Gameplay extends React.Component {
         <h2>Turn: {this.state.currentPlayer.name}</h2>
         <Gameboard 
           currentPlayer={this.state.currentPlayer}
-          isComputer={this.state.currentPlayer.type === 'computer'} 
           nextPlayerTurn={this.nextPlayerTurn}
           checkWin={this.checkWin}
           winner={this.state.winner}

@@ -1,11 +1,7 @@
-const Player = (enemyBoard) => {
-    const playerMove = (x, y) => {
-        enemyBoard.receiveAttack(x, y)
-    }
-
+const computerMoves = (enemyBoard) => {
+    // TOSEE: possibly change from filter function to dynamically added list 
+    //       of spots remaining for performance
     const emptySpots = () => {
-        // TOSEE: possibly change from filter function to dynamically added list 
-        //       of spots remaining for performance
         const spots = [];
         for(let row of enemyBoard.gameboard) {
             for(let spot of row) {
@@ -15,15 +11,8 @@ const Player = (enemyBoard) => {
         return spots.filter(spot => !spot.hit);
     }
 
-    const computerMove = () => {
-        const spotObj = emptySpots()[Math.floor(Math.random() * emptySpots().length)];
-        enemyBoard.receiveAttack({ spotObj, })
-    }
+    return emptySpots()[Math.floor(Math.random() * emptySpots().length)];
 
-    return {
-        playerMove,
-        computerMove
-    }
 }
 
-export { Player }
+export { computerMoves }

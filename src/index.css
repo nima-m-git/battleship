@@ -21,6 +21,10 @@ code {
   display: flex;
 }
 
+.playerBoard {
+  margin: 5vw;
+}
+
 .board, td {
   border: 1px solid black;
 }
